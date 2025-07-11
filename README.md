@@ -47,6 +47,6 @@ Sinta-se à vontade para explorar o código, sugerir melhorias ou adicionar nova
 ## 🧑‍💻 Autor
 
 [Feyki]
-[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/SeuUsuarioNoGitHub)
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/feyki)
 
 ---
