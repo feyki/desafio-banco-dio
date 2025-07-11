@@ -1,71 +1,98 @@
+# -*- coding: utf-8 -*-
+"""
+Sistema Bancário Simples
+
+Este programa simula as operações básicas de um caixa eletrônico:
+depósito, saque e extrato.
+
+Restrições:
+- Saques:
+  - Limite máximo de R$ 500,00 por saque.
+  - Limite de 3 saques por dia.
+  - Não é possível sacar se o saldo for insuficiente.
+- Depósitos:
+  - Apenas valores positivos são aceitos.
+- Extrato:
+  - Exibe o histórico de transações e o saldo atual.
+"""
+
 menu = """
 
 [d] Depositar
 [s] Sacar 
 [e] Extrato
-[q] sair
+[q] Sair
 
-=>  """
+=> """
 
-saldo = 0
-limite = 500
+saldo = 0.0  # Usar float para saldo, garantindo precisão monetária
+limite = 500.0
 extrato = ""
-numero_saques=0
-LIMITE_SAQUES = 3
+numero_saques = 0
+LIMITE_SAQUES = 3  # Constante para o limite de saques diários
 
 while True:
-    
-    opcao = input(menu)
-    
+    opcao = input(menu).lower()  # Converte a entrada para minúscula para flexibilidade
+
     if opcao == "d":
-        print("Depósito")
-        valor_digitado = input("Digite o valor que deseja depositar:\nR$ ")
-        
-        try: 
-            deposito = float(valor_digitado)
-   
+        print("\n--- OPERAÇÃO: DEPÓSITO ---")
+        valor_str = input("Informe o valor a ser depositado:\nR$ ")
+
+        try:
+            deposito = float(valor_str)
+
             if deposito > 0:
-                saldo += deposito # Adiciona o valor ao saldo
-                extrato += f"Depósito: R$ {deposito:.2f}\n" # Registra no extrato
+                saldo += deposito
+                # Registra a transação no extrato
+                extrato += f"Depósito: \tR$ {deposito:.2f}\n" 
                 print(f"Depósito de R$ {deposito:.2f} realizado com sucesso!")
-                print(f"\nTotal:R$ {saldo}")
-            else: # O 'else' para a validação do depósito também precisa estar no mesmo nível do 'if'
-                print("Operação falhou! O valor informado é inválido. Por favor, insira um valor positivo.")    
-        except ValueError: 
-            print("Erradão aí mano")
+                print(f"Saldo atual: R$ {saldo:.2f}")
+            else:
+                print("Operação falhou! O valor informado é inválido. Por favor, insira um valor positivo.")
+        except ValueError:
+            print("Operação falhou! Valor inválido. Por favor, digite um número para o depósito.")
 
     elif opcao == "s":
+        print("\n--- OPERAÇÃO: SAQUE ---")
         
         if numero_saques >= LIMITE_SAQUES:
-            print("pode mais não man")
+            print("Operação falhou! Limite diário de saques excedido.")
+            continue # Volta para o início do loop sem pedir o valor do saque
+
+        valor_str = input("Informe o valor a ser sacado:\nR$ ")
         
-       
-        
-        else:
-            print("Sacar")
-            valor_digitado = input("Digite o valor que deseja Sacar:\nR$ ")
-            
-        
-            try:
-                saque = float(valor_digitado)
-           
-                if saque <= limite and saque <= saldo:
-                    saldo -= saque
-                    numero_saques += 1
-                    extrato += f"Saque: R$ {saque:.2f}\n"
-                    print(f"Saque de R$ {saque:.2f} Realizado com sucesso!")
-                    print(f"\nTotal:R$ {saldo:.2f}")
-                else: # O 'else' para a validação do depósito também precisa estar no mesmo nível do 'if'
-                    print("Muito pobre mané kkkkkkk")    
-            
-            except ValueError: # O bloco 'except' deve estar no MESMO NÍVEL de indentação do 'try'
-                print("Operação falhou! Valor inválido. Por favor, digite um número.")
-        
-        
-    
+        try:
+            saque = float(valor_str)
+
+            if saque <= 0:
+                print("Operação falhou! O valor informado é inválido. Por favor, insira um valor positivo.")
+            elif saque > saldo:
+                print("Operação falhou! Você não possui saldo suficiente.")
+                print(f"Seu saldo atual é: R$ {saldo:.2f}")
+            elif saque > limite:
+                print(f"Operação falhou! O valor do saque excede o limite de R$ {limite:.2f} por operação.")
+            else:
+                saldo -= saque
+                numero_saques += 1
+                # Registra a transação no extrato
+                extrato += f"Saque: \t\tR$ {saque:.2f}\n" 
+                print(f"Saque de R$ {saque:.2f} realizado com sucesso!")
+                print(f"Saldo atual: R$ {saldo:.2f}")
+        except ValueError:
+            print("Operação falhou! Valor inválido. Por favor, digite um número para o saque.")
+
     elif opcao == "e":
-        print(extrato)
-        print(f"\nTotal:R$ {saldo}")
-        
+        print("\n--- EXTRATO ---")
+        if not extrato:  # Verifica se a string extrato está vazia
+            print("Não foram realizadas movimentações.")
+        else:
+            print(extrato)
+        print(f"Saldo atual: R$ {saldo:.2f}")
+        print("------------------")
+
     elif opcao == "q":
-        print('Sair')    
+        print("\nObrigado por usar nosso sistema bancário. Volte sempre!")
+        break  # Sai do loop while
+
+    else:
+        print("Operação inválida, por favor selecione novamente a operação desejada.")
